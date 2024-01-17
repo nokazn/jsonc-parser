@@ -1,0 +1,50 @@
+{
+  "name": "jsonc-parser",
+  "version": "0.1.0",
+  "private": true,
+  "description": "JSONC parser",
+  "keywords": [],
+  "license": "MIT",
+  "author": {
+    "name": "nokazn",
+    "url": "https://github.com/nokazn"
+  },
+  "sideEffects": false,
+  "exports": {
+    "require": "./lib/index.js",
+    "import": "./esm/index.js",
+    "default": "./lib/index.js"
+  },
+  "main": "lib/index.js",
+  "module": "esm/index.js",
+  "types": "types/index.d.ts",
+  "directories": {
+    "lib": "lib",
+    "test": "test"
+  },
+  "files": [
+    "lib",
+    "esm",
+    "src"
+  ],
+  "scripts": {
+    "check": "concurrently -c auto npm:check:*",
+    "check:fmt": "dprint check './**/*.{,m,c}{t,j}s' './**/*.{json,toml,md}'",
+    "check:lint": "eslint './**/*.{,m,c}{t,j}s'",
+    "check:type": "tsc --noEmit",
+    "fix": "concurrently -c auto npm:fix:*",
+    "fix:fmt": "dprint fmt './**/*.{,m,c}{t,j}s' './**/*.{json,toml,md}'",
+    "fix:lint": "eslint --fix './**/*.{,m,c}{t,j}s'"
+  },
+  "devDependencies": {
+    "@tsconfig/node20": "^20.1.2",
+    "@types/eslint": "^8.56.2",
+    "@types/node": "^20.11.5",
+    "@typescript-eslint/eslint-plugin": "^6.19.0",
+    "@typescript-eslint/parser": "^6.19.0",
+    "concurrently": "^8.2.2",
+    "eslint": "^9.0.0-alpha.1",
+    "eslint-config-prettier": "^9.1.0",
+    "typescript": "^5.3.3"
+  }
+}
