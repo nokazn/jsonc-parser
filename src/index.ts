@@ -1,4 +1,4 @@
-import { ExpectedColonError, ExpectedValueError, UnexpectedNewlineError } from "./errors";
+import { ExpectedColonError, ExpectedKeyError, ExpectedValueError, UnexpectedNewlineError } from "./errors";
 import { BOOLEAN, NEWLINE_REGEXP, NULL, NUMBER_REGEXP, TOKEN, WHITESPACE_REGEXP } from "./syntax";
 
 import type { ArrayType, ObjectType, ValueType } from "./syntax";
@@ -161,11 +161,14 @@ class JsoncParser {
         this.#skipWhitespace();
       }
       const key = this.#parseString();
+      if (key === undefined) {
+        throw new ExpectedKeyError();
+      }
+
       this.#skipWhitespace();
       this.#consumeColon();
       const value = this.#parseValue();
 
-      // @ts-expect-error: TODO: fix this
       result[key] = value;
       isInitialKey = false;
     }
