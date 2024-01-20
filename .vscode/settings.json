@@ -1,6 +1,6 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll.eslint": "explicit"
   },
   "[javascript][typescript][json][jsonc][toml][markdown]": {
     "editor.defaultFormatter": "dprint.dprint",
