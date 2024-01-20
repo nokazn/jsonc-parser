@@ -43,6 +43,13 @@ export class ExpectedCommaError extends ConsumerError {
   }
 }
 
+export class ExpectedKeyError extends Error {
+  constructor() {
+    // TODO: refine error message
+    super("Expected a key, but got nothing");
+  }
+}
+
 export class ExpectedValueError extends Error {
   constructor() {
     // TODO: refine error message
