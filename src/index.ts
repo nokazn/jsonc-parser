@@ -16,28 +16,24 @@ type ReadNextInit = {
 class JsoncParser {
   #index = 0;
   #input = "";
+
   constructor() {}
 
-  get #current(): string | undefined {
+  get #current(): Optional<string> {
     return this.#input.at(this.#index);
   }
 
-  get #isWhiteSpace() {
+  get #isWhiteSpace(): boolean {
     return this.#current
       ? WHITESPACE_REGEXP.test(this.#current)
       : false;
   }
 
-  #getCurrent(count?: number): string | undefined {
+  #getCurrent(count?: number): Optional<string> {
     const index = this.#index;
     return count
       ? this.#input.slice(index, index + count)
       : this.#current;
-  }
-
-  #hasBooleanOf(boolKey: keyof typeof BOOLEAN): boolean {
-    const bool = BOOLEAN[boolKey];
-    return this.#getCurrent(bool.length) === bool;
   }
 
   #readNext(init?: ReadNextInit): void {
@@ -74,20 +70,25 @@ class JsoncParser {
     this.#readNext();
   }
 
-  #parseNull(): Optional<null> {
-    return this.#getCurrent(NULL.length) === NULL
-      ? null
-      : undefined;
-  }
-
-  #parseBoolean(): Optional<boolean> {
-    if (this.#hasBooleanOf("TRUE")) {
-      return true;
-    }
-    if (this.#hasBooleanOf("FALSE")) {
-      return false;
+  #parseKeyword<V>(keyword: string, value: V): Optional<V> {
+    const length = keyword.length;
+    if (this.#getCurrent(length) === keyword) {
+      this.#readNext({ count: length });
+      return value;
     }
     return undefined;
+  }
+
+  #parseNull(): Optional<null> {
+    return this.#parseKeyword(NULL, null);
+  }
+
+  #parseTrue(): Optional<true> {
+    return this.#parseKeyword(BOOLEAN.TRUE, true);
+  }
+
+  #parseFalse(): Optional<false> {
+    return this.#parseKeyword(BOOLEAN.FALSE, false);
   }
 
   #parseString(): Optional<string> {
@@ -175,18 +176,17 @@ class JsoncParser {
 
   #parseValue(): ValueType {
     this.#skipWhitespace();
-    const nullValue = this.#parseNull();
-    if (nullValue !== undefined) {
-      return nullValue;
-    }
-    const value = this.#parseBoolean()
+    const value = this.#parseTrue()
+      ?? this.#parseFalse()
       ?? this.#parseString()
       ?? this.#parseNumber()
       ?? this.#parseArray()
-      ?? this.#parseObject();
+      ?? this.#parseObject()
+      ?? this.#parseNull();
     if (value === undefined) {
       throw new ExpectedValueError();
     }
+    this.#skipWhitespace();
     return value;
   }
 
