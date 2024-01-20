@@ -195,7 +195,7 @@ class JsoncParser {
 
   parse(input: string) {
     this.#input = input;
-    //  TODO: implement this
+    return this.#parseValue();
   }
 }
 
