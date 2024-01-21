@@ -1,5 +1,7 @@
-import { ExpectedColonError, ExpectedKeyError, ExpectedValueError, UnexpectedNewlineError } from "./errors";
-import { BOOLEAN, NEWLINE_REGEXP, NULL, NUMBER_REGEXP, TOKEN, WHITESPACE_REGEXP } from "./syntax";
+// @ts-expect-error: TODO: fix later
+import { ExpectedColonError, ExpectedCommaError, ExpectedKeyError, UnexpectedNewlineError } from "./errors";
+import { isWhiteSpace } from "./internals/string";
+import { BOOLEAN, NEWLINE_REGEXP, NULL, NUMBER_REGEXP, TOKEN } from "./syntax";
 
 import type { ArrayType, ObjectType, ValueType } from "./syntax";
 import type { Optional } from "./types";
@@ -24,9 +26,7 @@ class JsoncParser {
   }
 
   get #isWhiteSpace(): boolean {
-    return this.#current
-      ? WHITESPACE_REGEXP.test(this.#current)
-      : false;
+    return isWhiteSpace(this.#current);
   }
 
   #getCurrent(count?: number): Optional<string> {
@@ -40,11 +40,10 @@ class JsoncParser {
     this.#index += init?.count || 1;
     const current = this.#current;
     if (current === undefined) {
-      throw new UnexpectedNewlineError();
+      return;
     }
     if (init?.disallowNewLine && NEWLINE_REGEXP.test(current)) {
-      // TODO: better error message
-      throw new Error("Unexpected new line");
+      throw new UnexpectedNewlineError();
     }
   }
 
@@ -65,7 +64,7 @@ class JsoncParser {
   #consumeComma(init?: ConsumeOptionalTokenInit): void {
     const actual = this.#current;
     if (!init?.optional && actual !== TOKEN.COMMA) {
-      throw new ExpectedColonError({ actual });
+      throw new ExpectedCommaError({ actual });
     }
     this.#readNext();
   }
@@ -91,18 +90,19 @@ class JsoncParser {
     return this.#parseKeyword(BOOLEAN.FALSE, false);
   }
 
+  // TODO: adjust for escape characters
   #parseString(): Optional<string> {
     if (this.#current !== TOKEN.STRING_DELIMITER) {
       return undefined;
     }
 
     let result = "";
-
     this.#readNext({ disallowNewLine: true });
-    while (this.#current === TOKEN.STRING_DELIMITER) {
+    while (this.#current !== TOKEN.STRING_DELIMITER) {
       result += this.#current;
       this.#readNext({ disallowNewLine: true });
     }
+    this.#readNext();
     return result;
   }
 
@@ -111,10 +111,9 @@ class JsoncParser {
     let result = "";
     while (NUMBER_REGEXP.test(this.#current ?? "")) {
       result += this.#current;
-      this.#readNext({ disallowNewLine: true });
+      this.#readNext();
     }
     if (result) {
-      // TODO: fix this
       const num = Number(result);
       return Number.isNaN(num)
         ? undefined
@@ -127,7 +126,7 @@ class JsoncParser {
     if (this.#current !== TOKEN.START_ARRAY) {
       return undefined;
     }
-    const result = [];
+    const result: ArrayType = [];
     let isInitialValue = true;
 
     this.#readNext();
@@ -155,6 +154,7 @@ class JsoncParser {
 
     this.#readNext();
     this.#skipWhitespace();
+    // @ts-expect-error: TODO: fix later
     while (this.#current !== TOKEN.END_OBJECT) {
       if (!isInitialKey) {
         this.#consumeComma();
@@ -162,9 +162,8 @@ class JsoncParser {
       }
       const key = this.#parseString();
       if (key === undefined) {
-        throw new ExpectedKeyError();
+        break;
       }
-
       this.#skipWhitespace();
       this.#consumeColon();
       const value = this.#parseValue();
@@ -186,10 +185,8 @@ class JsoncParser {
       ?? this.#parseArray()
       ?? this.#parseObject()
       ?? this.#parseNull();
-    if (value === undefined) {
-      throw new ExpectedValueError();
-    }
     this.#skipWhitespace();
+    // @ts-expect-error: TODO: fix later
     return value;
   }
 

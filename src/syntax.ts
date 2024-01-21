@@ -1,7 +1,7 @@
 import { ValueOf } from "./types";
 
 export const NEWLINE_REGEXP = /\r\n|\r|\n/;
-export const WHITESPACE_REGEXP = new RegExp(`\s|\t|${NEWLINE_REGEXP}`);
+export const WHITESPACE_REGEXP = new RegExp(`\\s|\\t|${NEWLINE_REGEXP}`);
 export const NUMBER_REGEXP = /\d/;
 
 export const BOOLEAN = Object.freeze({
@@ -26,7 +26,7 @@ export type ValueType =
 
 export const TOKEN = Object.freeze({
   START_OBJECT: "{",
-  END_OBJECT: "{",
+  END_OBJECT: "}",
   START_ARRAY: "[",
   END_ARRAY: "]",
   STRING_DELIMITER: "\"",
