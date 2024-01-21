@@ -34,7 +34,8 @@
     "check:type": "tsc --noEmit",
     "fix": "concurrently -c auto npm:fix:*",
     "fix:fmt": "dprint fmt './**/*.{,m,c}{t,j}s' './**/*.{json,toml,md}'",
-    "fix:lint": "eslint --fix './**/*.{,m,c}{t,j}s'"
+    "fix:lint": "eslint --fix './**/*.{,m,c}{t,j}s'",
+    "test": "vitest"
   },
   "devDependencies": {
     "@tsconfig/node20": "^20.1.2",
@@ -45,6 +46,7 @@
     "concurrently": "^8.2.2",
     "eslint": "^9.0.0-alpha.1",
     "eslint-config-prettier": "^9.1.0",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "vitest": "^1.2.1"
   }
 }
