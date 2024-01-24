@@ -38,8 +38,18 @@ describe("JsoncParser", () => {
         "a": 1,
         "b": 2,
         "c": 3,
+        "d": 4
+      }`,
+      expected: { a: 1, b: 2, c: 3, d: 4 },
+    },
+    {
+      input: `
+      {
+        "a": 1,
+        "b": 2,
+        "c": 3,
         "d": 4,
-    }`,
+      }`,
       expected: { a: 1, b: 2, c: 3, d: 4 },
     },
     {
@@ -48,6 +58,10 @@ describe("JsoncParser", () => {
     },
     {
       input: `[1, 2, 3, 4]`,
+      expected: [1, 2, 3, 4],
+    },
+    {
+      input: `[1, 2, 3, 4,]`,
       expected: [1, 2, 3, 4],
     },
     {
