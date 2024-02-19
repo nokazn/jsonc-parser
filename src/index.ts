@@ -68,7 +68,7 @@ class JsoncParser {
     if (actual !== TOKEN.SEPARATOR) {
       throw new ExpectedError({
         actual,
-        expected: "\`:\`",
+        expected: "`:`",
       });
     }
     this.#readNext();
@@ -172,7 +172,7 @@ class JsoncParser {
       } else {
         throw new ExpectedError({
           actual: commaResult.actual ?? value?.toString(),
-          expected: "\`,\`",
+          expected: "`,`",
         });
       }
 
@@ -213,7 +213,7 @@ class JsoncParser {
         if (!commaResult.hasValue) {
           throw new ExpectedError({
             actual: commaResult.actual ?? key,
-            expected: "\`,\`",
+            expected: "`,`",
           });
         }
       }
