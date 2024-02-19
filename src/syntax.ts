@@ -1,4 +1,4 @@
-import { ValueOf } from "./types";
+import { ValueOf } from "./types.js";
 
 export const NEWLINE_REGEXP = /\r\n|\r|\n/;
 export const WHITESPACE_REGEXP = new RegExp(`\\s|\\t|${NEWLINE_REGEXP}`);

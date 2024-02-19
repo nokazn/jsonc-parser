@@ -1,9 +1,9 @@
-import { ExpectedError, ExpectedValueError, UnexpectedNewlineError } from "./errors";
-import { isWhiteSpace } from "./internals/string";
-import { BOOLEAN, NEWLINE_REGEXP, NULL, NUMBER_REGEXP, TOKEN } from "./syntax";
+import { ExpectedError, ExpectedValueError, UnexpectedNewlineError } from "./errors.js";
+import { isWhiteSpace } from "./internals/string.js";
+import { BOOLEAN, NEWLINE_REGEXP, NULL, NUMBER_REGEXP, TOKEN } from "./syntax.js";
 
-import type { ArrayType, ObjectType, ValueType } from "./syntax";
-import type { Optional, ValueOf } from "./types";
+import type { ArrayType, ObjectType, ValueType } from "./syntax.js";
+import type { Optional, ValueOf } from "./types.js";
 
 type ConsumeResult = {
   hasValue: true;

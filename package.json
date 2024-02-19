@@ -9,6 +9,7 @@
     "name": "nokazn",
     "url": "https://github.com/nokazn"
   },
+  "type": "module",
   "sideEffects": false,
   "exports": {
     "require": "./lib/index.js",

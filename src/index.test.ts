@@ -1,5 +1,5 @@
 import { describe, expect, test } from "vitest";
-import { JsoncParser } from "./index";
+import { JsoncParser } from "./index.js";
 
 type TestCase<I, E = unknown> = {
   name?: string;

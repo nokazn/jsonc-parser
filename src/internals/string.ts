@@ -1,5 +1,5 @@
-import { Optional } from "~/types";
-import { NEWLINE_REGEXP, WHITESPACE_REGEXP } from "../syntax";
+import { Optional } from "~/types.js";
+import { NEWLINE_REGEXP, WHITESPACE_REGEXP } from "../syntax.js";
 
 export const isNewLine = (str: Optional<string>) => {
   return str ? NEWLINE_REGEXP.test(str) : false;
